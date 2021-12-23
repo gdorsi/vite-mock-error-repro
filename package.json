@@ -1,12 +1,12 @@
 {
   "type": "module",
-  "name": "pomodoro",
+  "name": "potrello",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "server/server.js",
   "scripts": {
-    "start": "node server",
-    "dev": "nodemon server"
+    "start": "node server/server",
+    "dev": "nodemon server/server"
   },
   "keywords": [],
   "author": "",
