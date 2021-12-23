@@ -1,6 +1,6 @@
-import fastify from 'fastify'
-import {signup, login} from '../controllers/users.js'
-import User from '../schemas.js'
+import { signup, login } from "../controllers/users.js"
+import User from "../schemas.js"
+
 const signupOpts = {
   schema: {
     body: {
@@ -13,34 +13,33 @@ const signupOpts = {
       },
     },
     response: {
-        201: User
-    }
+      201: User,
+    },
   },
-  handler: signup
+  handler: signup,
 }
+
 const loginOpts = {
   schema: {
     body: {
       type: "object",
-      required: [ "password", "email"],
+      required: ["password", "email"],
       properties: {
-       
         password: { type: "string" },
         email: { type: "string" },
       },
     },
     response: {
-        201: User
-    }
+      201: User,
+    },
   },
-  handler: login
+  handler: login,
 }
 
 function userRoutes(fastify, options, done) {
-    fastify.post("/signup/", signupOpts)
-    fastify.post("/login/", loginOpts)
-    done()
+  fastify.post("/signup/", signupOpts)
+  fastify.post("/login/", loginOpts)
+  done()
 }
 
-export default  userRoutes
-
+export default userRoutes

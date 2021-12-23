@@ -1,5 +1,6 @@
-import buildServer from './index.js'
-import config from './config.js'
+import buildServer from "./index.js"
+import config from "./config.js"
+
 const fastify = buildServer(config)
 
 const start = async function () {
