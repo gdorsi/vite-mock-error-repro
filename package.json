@@ -1,0 +1,26 @@
+{
+  "type": "module",
+  "name": "pomodoro",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server",
+    "dev": "nodemon server"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ajv": "^6.12.6",
+    "desm": "^1.2.0",
+    "dotenv": "^10.0.0",
+    "env-schema": "^3.5.1",
+    "fastify": "^3.23.1",
+    "fastify-cookie": "^5.3.2",
+    "fastify-jwt": "^3.2.1",
+    "fastify-mongodb": "^4.1.1",
+    "fluent-json-schema": "^3.0.1",
+    "pino-pretty": "^7.3.0"
+  }
+}
