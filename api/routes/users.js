@@ -1,4 +1,4 @@
-import { signup, login } from "../controllers/users.js"
+import { signup, login, getUser } from "../controllers/users.js"
 import User from "../schemas.js"
 
 const signupOpts = {
@@ -35,10 +35,21 @@ const loginOpts = {
   },
   handler: login,
 }
+const getUserOpts = {
+  schema : {
+      response: {
+          201: User
+
+      }
+  },
+  handler: getUser
+}
+
 
 function userRoutes(fastify, options, done) {
   fastify.post("/signup/", signupOpts)
   fastify.post("/login/", loginOpts)
+  fastify.get("/users/:id/",getUserOpts)
   done()
 }
 

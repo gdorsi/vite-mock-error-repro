@@ -1,5 +1,5 @@
-const Board = require("../schemas")
-const { createBoard, deleteBoard } = require("../controllers/boards")
+import Board from "../schemas.js"
+import { createBoard, deleteBoard, getBoard , updateBoard} from "../controllers/boards.js"
 
 const createBoardOpts = {
   schema: {
@@ -19,25 +19,45 @@ const createBoardOpts = {
 }
 
 const deleteBoardOpts = {
+  schema : {
+    response: {
+        201: Board
+
+    }
+},
+handler: deleteBoard
+}
+const getBoardOpts = {
+  schema : {
+      response: {
+          201: Board
+
+      }
+  },
+  handler: getBoard
+}
+const updateBoardOpts = {
   schema: {
     body: {
       type: "object",
-      required: ["name"],
+      required: ["name", "creator"],
       properties: {
         name: { type: "string" },
+        creator: { type: "string" },
       },
     },
     response: {
-      200: message,
+      201: Board,
     },
   },
-  handler: deleteBoard,
+  handler: updateBoard,
 }
-
 function boardRoutes(fastify, options, done) {
-  fastify.post("/createBoard/", createBoardOpts)
-  fastify.delete("/deleteBoard/", deleteBoardOpts)
+  fastify.post("/boards/", createBoardOpts)
+  fastify.delete("/boards/:id", deleteBoardOpts)
+  fastify.get("/boards/:id", getBoardOpts)
+  fastify.put("/boards/:id", updateBoardOpts)
   done()
 }
 
-module.exports = boardRoutes
+export default boardRoutes

@@ -1,3 +1,5 @@
+import { ObjectId } from 'mongodb';
+
 async function signup(req, reply) {
   const { username, password, email } = req.body
 
@@ -30,5 +32,14 @@ async function login(req, reply) {
   }
   reply.code(400).send({ message: "user not found" })
 }
-
-export { signup, login }
+async function getUser(req, reply) {
+  const users = this.mongo.db.collection("users")
+console.log(new ObjectId(req.params.id))
+  const result = await users.findOne({ _id: new ObjectId(req.params.id) })
+  if (result) {
+    
+    return reply.send(result)
+  }
+  reply.code(404).send({ message: "Not found" })
+}
+export { signup, login, getUser }
