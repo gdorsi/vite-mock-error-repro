@@ -1,4 +1,5 @@
 import { ObjectId } from 'mongodb'
+import { ModelError } from '../plugins/model.js'
 
 async function signup(req, reply) {
 	const { username, password, email } = req.body
@@ -20,18 +21,13 @@ async function signup(req, reply) {
 
 async function login(req, reply) {
 	const { password, email } = req.body
-	const users = this.mongo.db.collection('users')
-
-	const result = await users.findOne({ email: email })
-	if (result) {
-		if (password === result.password) {
-			const id = result._id
-			return { token: this.jwt.sign({ id }) }
-		} else {
-			reply.code(500).send({ message: 'wrong password' })
-		}
+	try {
+		const { id } = await this.model.login(email, password)
+		return { token: this.jwt.sign({ id }) }
+	} catch (error) {
+		if (error instanceof ModelError) reply.code(401).send({ message: error.message })
+		else throw error
 	}
-	reply.code(400).send({ message: 'user not found' })
 }
 async function getUser(req, reply) {
 	const users = this.mongo.db.collection('users')
