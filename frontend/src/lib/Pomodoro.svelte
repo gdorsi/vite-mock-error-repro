@@ -62,22 +62,28 @@
 
 <section>
 	<div>
-		<button class:state class:active={state === STATES.WORK} on:click={stateUpdater(STATES.WORK)}
-			>Work</button
-		>
-		<button class:state class:active={state === STATES.BREAK} on:click={stateUpdater(STATES.BREAK)}
-			>Short Break</button
+		<button class="state" class:active={state === STATES.WORK} on:click={stateUpdater(STATES.WORK)}
+			>Pomodoro</button
 		>
 		<button
-			class:state
+			class="state"
+			class:active={state === STATES.BREAK}
+			on:click={stateUpdater(STATES.BREAK)}>Short Break</button
+		>
+		<button
+			class="state"
 			class:active={state === STATES.LONG_BREAK}
 			on:click={stateUpdater(STATES.LONG_BREAK)}>Long Break</button
 		>
 	</div>
-	<div>{Math.floor(seconds / 60)}:{seconds % 60}</div>
+	<div class="timer">
+		{Math.floor(seconds / 60)
+			.toString()
+			.padStart(2, '0')}:{(seconds % 60).toString().padStart(2, '0')}
+	</div>
 	<div>
-		<button on:click={toggle}>{active ? 'Pause' : 'Play'}</button>
-		<button on:click={next}>Next</button>
+		<button class="action" on:click={toggle}>{active ? 'Pause' : 'Start'}</button>
+		<button class="action next" on:click={next}>|></button>
 	</div>
 </section>
 
@@ -85,12 +91,41 @@
 	section {
 		display: grid;
 		place-items: center;
-		gap: 16px;
+		grid-gap: 16px;
 	}
+
 	.state {
 		opacity: 1;
 	}
+
 	.active {
-		opacity: 0.6;
+		border-color: white;
+	}
+
+	.timer {
+		font-size: 4rem;
+	}
+
+	button {
+		padding: 8px 12px;
+		border: 2px solid var(--primary-color);
+		background: rgba(0, 0, 0, 0.15) none repeat scroll 0% 0%;
+		color: white;
+		border-radius: 6px;
+		text-transform: uppercase;
+		cursor: pointer;
+	}
+
+	.action {
+		background: white;
+		font-weight: bold;
+		color: var(--primary-color);
+		font-size: 1.5rem;
+	}
+
+	.next {
+		font-family: monospace;
+		font-weight: bolder;
+		letter-spacing: 0.1em;
 	}
 </style>
