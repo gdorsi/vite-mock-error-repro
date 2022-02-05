@@ -2,7 +2,7 @@ import { ObjectId } from 'mongodb'
 
 async function createBoard(req, reply) {
 	const name = req.body.name
-	const creator = req.body.creator
+	const creator = req.user.id
 	const boards = this.mongo.db.collection('boards')
 	const data = { name, creator }
 	const findName = await boards.findOne({ name: name })

@@ -13,6 +13,9 @@ Content-Type: application/json
 POST http://localhost:3000/signup/ HTTP/1.1 
 Content-Type: application/json
 
+POST http://localhost:3000/signup/ HTTP/1.1 
+Content-Type: application/json
+
 {
         "username": "New Itesdsm",
         "password": "pippsds",
@@ -32,12 +35,12 @@ Content-Type: application/json
 ###619cc5fa2368b4fd20743ab6
 GET http://localhost:3000/users/619cc5fa2368b4fd20743ab6/ HTTP/1.1 
 ###619cc5fa2368b4fd20743ab6
-POST http://localhost:3000/tasks/ HTTP/1.1
+POST http://localhost:3000/boards/ HTTP/1.1
 Content-Type: application/json
 
 {
-        "name": "Nefsfffw Item",
-        "board": "61c9e5c4a8603b553a77667e"
+        "name": "Nefsfffwfff f",
+        "creator": "fdssad"
 
 } 
 ###619cc5fa2368b4fd20743ab6
