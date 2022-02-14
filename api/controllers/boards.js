@@ -29,13 +29,14 @@ async function deleteBoard(req, reply) {
 	}
 }
 async function getBoard(req, reply) {
-	const boards = this.mongo.db.collection('boards')
-
-	const result = await boards.findOne({ _id: new ObjectId(req.params.id) })
-	if (result) {
-		return reply.send(result)
+	const id = req.params.id
+	try {
+		const result = await this.boardModels.getBoard(id)
+		return { result }
+	} catch (error) {
+		if (error instanceof ModelError) reply.code(404).send({ message: error.message })
+		else throw error
 	}
-	reply.code(500).send({ message: 'Not found' })
 }
 async function updateBoard(req, reply) {
 	const boards = this.mongo.db.collection('boards')

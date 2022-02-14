@@ -1,13 +1,13 @@
 import t from 'tap'
 import fastify from 'fastify'
 import sinon from 'sinon'
-import { ModelError } from '../../plugins/model.js'
+import { ModelError } from '../../plugins/userModels.js'
 
 const { test } = t
 
 function buildServer() {
 	return fastify()
-		.decorate('model', { login: sinon.stub(), signup: sinon.stub(), getUser: sinon.stub() })
+		.decorate('userModels', { login: sinon.stub(), signup: sinon.stub(), getUser: sinon.stub() })
 		.decorate('jwt', { sign: sinon.stub() })
 		.register(import('../../routes/users.js'))
 }
@@ -40,7 +40,7 @@ test('POST /login', async (t) => {
 
 	t.test('returns 401 with wrong credentials', async (t) => {
 		const fastify = buildServer()
-		fastify.model.login.rejects(new ModelError('Wrong Password'))
+		fastify.userModels.login.rejects(new ModelError('Wrong Password'))
 		const res = await fastify.inject({
 			url: '/login/',
 			method: 'POST',
@@ -56,7 +56,7 @@ test('POST /login', async (t) => {
 	t.test('returns 401 when user is not found in database', async (t) => {
 		const fastify = buildServer()
 
-		fastify.model.login.rejects(new ModelError('User Not Found'))
+		fastify.userModels.login.rejects(new ModelError('User Not Found'))
 
 		const res = await fastify.inject({
 			url: '/login/',
@@ -73,7 +73,7 @@ test('POST /login', async (t) => {
 	t.test('returns 500 when database errors', async (t) => {
 		const fastify = buildServer()
 
-		fastify.model.login.rejects(new Error('Database Error'))
+		fastify.userModels.login.rejects(new Error('Database Error'))
 
 		const res = await fastify.inject({
 			url: '/login/',
@@ -90,7 +90,7 @@ test('POST /login', async (t) => {
 	t.test('obtains a token with right credentials', async (t) => {
 		const fastify = buildServer()
 
-		fastify.model.login.resolves({
+		fastify.userModels.login.resolves({
 			id: 1
 		})
 		fastify.jwt.sign.returns('jwt token')
@@ -136,9 +136,7 @@ test('POST /signup', async (t) => {
 
 	t.test('returns 409 when username is already in use', async (t) => {
 		const fastify = buildServer()
-
-		fastify.model.signup.rejects(new ModelError('username is already in use'))
-
+		fastify.userModels.signup.rejects(new ModelError('Username already in use'))
 		const res = await fastify.inject({
 			url: '/signup/',
 			method: 'POST',
@@ -153,9 +151,7 @@ test('POST /signup', async (t) => {
 	})
 	t.test('returns 409 when email is already in use', async (t) => {
 		const fastify = buildServer()
-
-		fastify.model.signup.rejects(new ModelError(' email is already in use'))
-
+		fastify.userModels.signup.rejects(new ModelError('Email already in use'))
 		const res = await fastify.inject({
 			url: '/signup/',
 			method: 'POST',
@@ -172,7 +168,7 @@ test('POST /signup', async (t) => {
 	t.test('returns 500 when database errors', async (t) => {
 		const fastify = buildServer()
 
-		fastify.model.signup.rejects(new Error('Database Error'))
+		fastify.userModels.signup.rejects(new Error('Database Error'))
 
 		const res = await fastify.inject({
 			url: '/signup/',
@@ -190,7 +186,7 @@ test('POST /signup', async (t) => {
 	t.test('obtains a token with succesful signup', async (t) => {
 		const fastify = buildServer()
 
-		fastify.model.signup.resolves({
+		fastify.userModels.signup.resolves({
 			id: 1
 		})
 		fastify.jwt.sign.returns('jwt token')
@@ -213,10 +209,10 @@ test('POST /signup', async (t) => {
 test('GET /users/:id', async (t) => {
 	t.test('returns error when user id does not exist', async (t) => {
 		const fastify = buildServer()
-		fastify.model.getUser.rejects(new Error('User id does not exist'))
+		fastify.userModels.getUser.rejects(new ModelError('User id does not exist'))
 
 		const res = await fastify.inject({
-			url: '/users/notexist1',
+			url: '/users/notexist1/',
 			method: 'GET'
 		})
 		t.equal(res.statusCode, 404)
@@ -224,7 +220,7 @@ test('GET /users/:id', async (t) => {
 	t.test('returns 500 when database errors', async (t) => {
 		const fastify = buildServer()
 
-		fastify.model.getUser.rejects(new Error('Database Error'))
+		fastify.userModels.getUser.rejects(new Error('Database Error'))
 
 		const res = await fastify.inject({
 			url: '/users/notexist1/',
@@ -236,7 +232,7 @@ test('GET /users/:id', async (t) => {
 
 	t.test('return user when id is found', async (t) => {
 		const fastify = buildServer()
-		fastify.model.getUser.resolves({
+		fastify.userModels.getUser.resolves({
 			id: '1',
 			username: 'dfsdfsdsNew Item',
 			password: 'pipssp',

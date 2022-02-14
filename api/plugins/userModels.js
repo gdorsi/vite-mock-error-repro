@@ -1,8 +1,8 @@
 import { ObjectId } from 'mongodb'
 export class ModelError extends Error {}
 
-async function model(fastify) {
-	fastify.decorate('model', {
+async function userModels(fastify) {
+	fastify.decorate('userModels', {
 		login: async (email, password) => {
 			const users = fastify.mongo.db.collection('users')
 
@@ -44,6 +44,6 @@ async function model(fastify) {
 	})
 }
 
-model[Symbol.for('skip-override')] = true
+userModels[Symbol.for('skip-override')] = true
 
-export default model
+export default userModels
