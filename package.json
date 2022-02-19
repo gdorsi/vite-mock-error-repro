@@ -6,7 +6,8 @@
 	"main": "api/server.js",
 	"scripts": {
 		"start": "node api/server",
-		"dev": "nodemon api/server"
+		"dev": "nodemon api/server",
+		"frontend-dev": "yarn workspace frontend run dev"
 	},
 	"keywords": [],
 	"author": "",
@@ -18,6 +19,7 @@
 		"env-schema": "^3.5.1",
 		"fastify": "^3.23.1",
 		"fastify-cookie": "^5.3.2",
+		"fastify-cors": "^6.0.2",
 		"fastify-jwt": "^3.2.1",
 		"fastify-mongodb": "^4.1.1",
 		"fluent-json-schema": "^3.0.1",
@@ -35,5 +37,8 @@
 	"workspaces": [
 		"frontend"
 	],
-	"packageManager": "yarn@3.1.1"
+	"packageManager": "yarn@3.1.1",
+	"devDependencies": {
+		"nodemon": "^2.0.15"
+	}
 }

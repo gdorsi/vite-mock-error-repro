@@ -20,6 +20,7 @@ function buildServer(config) {
 		url: process.env.DB_URL
 	})
 
+	fastify.register(import('fastify-cors'))
 	fastify.register(import('./plugins/authenticate.js'))
 	fastify.register(import('./plugins/userModels.js'))
 	fastify.register(import('./plugins/boardModels.js'))
