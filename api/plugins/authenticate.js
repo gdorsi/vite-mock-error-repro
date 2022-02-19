@@ -1,6 +1,6 @@
 async function authenticate(fastify) {
 	fastify.register(import('fastify-jwt'), {
-		secret: process.env.JWT_SECRET
+		secret: 'supersecret'
 	})
 
 	fastify.decorate('authenticate', async (req, reply) => {

@@ -22,6 +22,7 @@ function buildServer(config) {
 
 	fastify.register(import('./plugins/authenticate.js'))
 	fastify.register(import('./plugins/userModels.js'))
+	fastify.register(import('./plugins/boardModels.js'))
 	fastify.register(import('./routes/users.js'))
 	fastify.register(import('./routes/boards.js'))
 	fastify.register(import('./routes/tasks.js'))

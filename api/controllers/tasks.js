@@ -4,10 +4,10 @@ async function createTask(req, reply) {
 	const tasks = this.mongo.db.collection('tasks')
 	const boards = this.mongo.db.collection('boards')
 	const name = req.body.name
-	const Board = new ObjectId(req.body.board)
+	const Board = req.body.board
 	const state = 'iniziato'
 	const npomodoro = 0
-	const findBoard = await boards.findOne({ _id: Board })
+	const findBoard = await boards.findOne({ _id: new ObjectId(Board) })
 	if (findBoard) {
 		const data = { name, Board, state, npomodoro }
 		const result = await tasks.insertOne(data)
