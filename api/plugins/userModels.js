@@ -35,11 +35,16 @@ async function userModels(fastify) {
 		},
 		getUser: async (id) => {
 			const users = fastify.mongo.db.collection('users')
-
+			const boards = fastify.mongo.db.collection('boards')
 			const result = await users.findOne({ _id: new ObjectId(id) })
 			if (!result) {
 				throw new ModelError('user does not exist')
-			} else if (result) return result
+			} else if (result) {
+				const cursor = await boards.find({ creator: id })
+				const boardList = await cursor.toArray()
+
+				return { result, boardList }
+			}
 		}
 	})
 }

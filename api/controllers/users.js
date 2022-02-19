@@ -23,10 +23,10 @@ async function login(req, reply) {
 	}
 }
 async function getUser(req, reply) {
-	const id = req.params.id
+	const id = req.user.id
 	try {
-		const user = await this.userModels.getUser(id)
-		return { user }
+		const result = await this.userModels.getUser(id)
+		return { result }
 	} catch (error) {
 		if (error instanceof ModelError) reply.code(404).send({ message: error.message })
 		else throw error
