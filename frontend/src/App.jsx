@@ -116,6 +116,15 @@ function App() {
 						<input type="text" value={boardName} onChange={(e) => setBoardName(e.target.value)} />
 						<button type="submit">+</button>
 					</form>
+					{boardList ? (
+						<div className="boards">
+							{boardList.map((board) => (
+								<div>{board.name}</div>
+							))}
+						</div>
+					) : (
+						<div></div>
+					)}
 				</div>
 			)}
 		</div>
