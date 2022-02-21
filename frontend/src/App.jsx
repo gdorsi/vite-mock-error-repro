@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import logo from './logo.svg'
+
 import './App.css'
 
 function App() {
@@ -9,6 +9,25 @@ function App() {
 	const [boardName, setBoardName] = useState('')
 	const [boardList, setBoardList] = useState([])
 	const [user, setUser] = useState({})
+	const [username, setUsername] = useState('')
+	const [login, setLogin] = useState(true)
+	async function deleteBoard(id) {
+		try {
+			let res = await fetch('http://localhost:3001/boards/' + id, {
+				method: 'DELETE',
+				headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token }
+			})
+
+			let resJson = await res.json()
+			if (res.status === 200) {
+				getUser(token)
+			} else {
+				console.log('Some error occured')
+			}
+		} catch (err) {
+			console.log(err)
+		}
+	}
 	async function getUser(tok) {
 		try {
 			let res = await fetch('http://localhost:3001/users/', {
@@ -43,6 +62,7 @@ function App() {
 			let resJson = await res.json()
 			if (res.status === 200) {
 				setBoardName('')
+				getUser(token)
 			} else {
 				console.log('Some error occured')
 			}
@@ -75,33 +95,96 @@ function App() {
 			console.log(err)
 		}
 	}
+	async function handleSignup() {
+		try {
+			let res = await fetch('http://localhost:3001/signup/', {
+				method: 'POST',
+
+				headers: { 'Content-Type': 'application/json' },
+
+				body: JSON.stringify({
+					email: email,
+					password: password,
+					username: username
+				})
+			})
+			let resJson = await res.json()
+			if (res.status === 200) {
+				setUsername('')
+				handleLogin()
+			} else {
+				console.log('Some error occured')
+			}
+		} catch (err) {
+			console.log(err)
+		}
+	}
 	return (
 		<div>
 			{!token ? (
 				<div>
-					<form
-						className="Loginform"
-						onSubmit={(event) => {
-							event.preventDefault()
-							handleLogin()
-						}}
-					>
-						Email:
-						<input
-							className="Email"
-							type="text"
-							value={email}
-							onChange={(e) => setEmail(e.target.value)}
-						/>
-						Password:{' '}
-						<input
-							className="Password"
-							type="password"
-							value={password}
-							onChange={(e) => setPassword(e.target.value)}
-						/>
-						<button type="submit">Login</button>
-					</form>
+					{login ? (
+						<div>
+							<form
+								className="Loginform"
+								onSubmit={(event) => {
+									event.preventDefault()
+									handleLogin()
+								}}
+							>
+								Email:
+								<input
+									className="Email"
+									type="text"
+									value={email}
+									onChange={(e) => setEmail(e.target.value)}
+								/>
+								Password:{' '}
+								<input
+									className="Password"
+									type="password"
+									value={password}
+									onChange={(e) => setPassword(e.target.value)}
+								/>
+								<button type="submit">Login</button>
+							</form>
+							<button onClick={(e) => setLogin(false)}> signup instead</button>
+						</div>
+					) : (
+						<div>
+							<form
+								className="SignupForm"
+								onSubmit={(event) => {
+									event.preventDefault()
+									handleSignup()
+								}}
+							>
+								Email:
+								<input
+									className="Email"
+									type="text"
+									value={email}
+									onChange={(e) => setEmail(e.target.value)}
+								/>
+								Username:
+								<input
+									className="Username"
+									type="text"
+									value={username}
+									onChange={(e) => setUsername(e.target.value)}
+								/>
+								Password:{' '}
+								<input
+									className="Password"
+									type="password"
+									value={password}
+									onChange={(e) => setPassword(e.target.value)}
+								/>
+								<button type="submit">Signup</button>
+							</form>
+							<button onClick={(e) => setLogin(true)}> login instead</button>
+						</div>
+					)}
 				</div>
 			) : (
 				<div>
@@ -119,7 +202,17 @@ function App() {
 					{boardList ? (
 						<div className="boards">
 							{boardList.map((board) => (
-								<div>{board.name}</div>
+								<div>
+									<button>{board.name}</button>
+									<button
+										onClick={(event) => {
+											event.preventDefault()
+											deleteBoard(board._id)
+										}}
+									>
+										x
+									</button>
+								</div>
 							))}
 						</div>
 					) : (
