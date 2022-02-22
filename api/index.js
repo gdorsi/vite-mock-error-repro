@@ -1,20 +1,4 @@
-import Fastify from 'fastify'
-
-import dotenv from 'dotenv'
-
-dotenv.config()
-
-function buildServer(config) {
-	const opts = {
-		...config,
-		logger: {
-			level: config.LOG_LEVEL,
-			prettyPrint: config.PRETTY_PRINT
-		}
-	}
-
-	const fastify = Fastify(opts)
-
+async function apiServer(fastify) {
 	fastify.register(import('fastify-mongodb'), {
 		forceClose: true,
 		url: process.env.DB_URL
@@ -24,10 +8,19 @@ function buildServer(config) {
 	fastify.register(import('./plugins/authenticate.js'))
 	fastify.register(import('./plugins/userModels.js'))
 	fastify.register(import('./plugins/boardModels.js'))
-	fastify.register(import('./routes/users.js'))
-	fastify.register(import('./routes/boards.js'))
-	fastify.register(import('./routes/tasks.js'))
+
+	fastify.register(
+		async (fastify) => {
+			fastify.register(import('./routes/users.js'))
+			fastify.register(import('./routes/boards.js'))
+			fastify.register(import('./routes/tasks.js'))
+		},
+		{
+			prefix: '/api'
+		}
+	)
+
 	return fastify
 }
 
-export default buildServer
+export default apiServer

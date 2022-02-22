@@ -13,7 +13,7 @@ function App() {
 	const [login, setLogin] = useState(true)
 	async function deleteBoard(id) {
 		try {
-			let res = await fetch('http://localhost:3001/boards/' + id, {
+			let res = await fetch('/api/boards/' + id, {
 				method: 'DELETE',
 				headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token }
 			})
@@ -30,7 +30,7 @@ function App() {
 	}
 	async function getUser(tok) {
 		try {
-			let res = await fetch('http://localhost:3001/users/', {
+			let res = await fetch('/api/users/', {
 				method: 'GET',
 				headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + tok }
 			})
@@ -50,7 +50,7 @@ function App() {
 		let bearer = 'Bearer ' + token
 		console.log(bearer)
 		try {
-			let res = await fetch('http://localhost:3001/boards/', {
+			let res = await fetch('/api/boards/', {
 				method: 'POST',
 
 				headers: { 'Content-Type': 'application/json', Authorization: bearer },
@@ -72,7 +72,7 @@ function App() {
 	}
 	async function handleLogin() {
 		try {
-			let res = await fetch('http://localhost:3001/login/', {
+			let res = await fetch('/api/login/', {
 				method: 'POST',
 
 				headers: { 'Content-Type': 'application/json' },
@@ -97,7 +97,7 @@ function App() {
 	}
 	async function handleSignup() {
 		try {
-			let res = await fetch('http://localhost:3001/signup/', {
+			let res = await fetch('/api/signup/', {
 				method: 'POST',
 
 				headers: { 'Content-Type': 'application/json' },
