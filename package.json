@@ -7,7 +7,7 @@
 	"scripts": {
 		"prod": "node prod.js",
 		"test": "tap",
-		"dev": "fastify start dev.js --watch",
+		"dev": "fastify start dev.js --watch -l info -P",
 		"build": "vite build"
 	},
 	"keywords": [],
