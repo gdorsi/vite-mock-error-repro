@@ -6,6 +6,7 @@
 	"main": "api/server.js",
 	"scripts": {
 		"prod": "node prod.js",
+		"test": "tap",
 		"dev": "fastify start dev.js --watch",
 		"build": "vite build"
 	},
