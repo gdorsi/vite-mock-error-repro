@@ -9,6 +9,7 @@ function buildServer() {
 	return fastify()
 		.decorate('userModels', { login: sinon.stub(), signup: sinon.stub(), getUser: sinon.stub() })
 		.decorate('jwt', { sign: sinon.stub() })
+		.decorate('authenticate', sinon.stub())
 		.register(import('../../routes/users.js'))
 }
 
@@ -206,20 +207,25 @@ test('POST /signup', async (t) => {
 	})
 })
 
-test('GET /users/:id', async (t) => {
+test('GET /users/', async (t) => {
 	t.test('returns error when user id does not exist', async (t) => {
 		const fastify = buildServer()
 		fastify.userModels.getUser.rejects(new ModelError('User id does not exist'))
-
+		fastify.authenticate.callsFake(async (request) => {
+			request.user = { id: 'notexist', iat: 1 }
+		})
 		const res = await fastify.inject({
-			url: '/users/notexist1/',
+			url: '/users/',
 			method: 'GET'
 		})
 		t.equal(res.statusCode, 404)
 	})
-	t.test('returns 500 when database errors', async (t) => {
+	t.test('returns 404 when database errors', async (t) => {
 		const fastify = buildServer()
-
+		
+		fastify.authenticate.callsFake(async (request) => {
+			request.user = { id: '1', iat: 1 }
+		})
 		fastify.userModels.getUser.rejects(new Error('Database Error'))
 
 		const res = await fastify.inject({
@@ -227,11 +233,14 @@ test('GET /users/:id', async (t) => {
 			method: 'GET'
 		})
 
-		t.equal(res.statusCode, 500)
+		t.equal(res.statusCode, 404)
 	})
 
 	t.test('return user when id is found', async (t) => {
 		const fastify = buildServer()
+		fastify.authenticate.callsFake(async (request) => {
+			request.user = { id: '1', iat: 1 }
+		})
 		fastify.userModels.getUser.resolves({
 			id: '1',
 			username: 'dfsdfsdsNew Item',
@@ -239,13 +248,13 @@ test('GET /users/:id', async (t) => {
 			email: 'pippsdddsssssadao@baudo'
 		})
 		const res = await fastify.inject({
-			url: '/users/1/',
+			url: '/users/',
 			method: 'GET'
 		})
 
 		t.equal(res.statusCode, 200)
 		t.same(await res.json(), {
-			user: {
+			result: {
 				id: '1',
 				username: 'dfsdfsdsNew Item',
 				password: 'pipssp',

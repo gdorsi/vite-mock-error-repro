@@ -1,19 +1,19 @@
 import { ObjectId } from 'mongodb'
+import { ModelError } from '../plugins/taskModels.js'
 
 async function createTask(req, reply) {
-	const tasks = this.mongo.db.collection('tasks')
-	const boards = this.mongo.db.collection('boards')
+	
 	const name = req.body.name
 	const Board = req.body.board
 	const state = 'iniziato'
 	const npomodoro = 0
-	const findBoard = await boards.findOne({ _id: new ObjectId(Board) })
-	if (findBoard) {
-		const data = { name, Board, state, npomodoro }
-		const result = await tasks.insertOne(data)
-		return reply.send(data)
-	} else {
-		reply.code(404).send({ message: ' Board not found' })
+	const data = { name, Board, state, npomodoro }
+	try {
+		const result = await this.taskModels.createTask(data)
+		return { result }
+	} catch (error) {
+		if (error instanceof ModelError) reply.code(409).send({ message: error.message })
+		else throw error
 	}
 }
 

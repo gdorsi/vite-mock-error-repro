@@ -8,6 +8,7 @@ async function apiServer(fastify) {
 	fastify.register(import('./plugins/authenticate.js'))
 	fastify.register(import('./plugins/userModels.js'))
 	fastify.register(import('./plugins/boardModels.js'))
+	fastify.register(import('./plugins/taskModels.js'))
 
 	fastify.register(
 		async (fastify) => {
