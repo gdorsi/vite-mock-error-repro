@@ -6,7 +6,9 @@ async function boardModels(fastify) {
 		createBoard: async (data) => {
 			const boards = fastify.mongo.db.collection('boards')
 
-			const findName = await boards.findOne({ name: data.name }, { creator: data.creator })
+			const findName = await boards.findOne({
+				$and: [{ name: data.name }, { creator: data.creator }]
+			})
 			if (findName) {
 				throw new ModelError('name already in use')
 			}

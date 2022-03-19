@@ -8,6 +8,12 @@ async function taskModels(fastify) {
 			const boards = fastify.mongo.db.collection('boards')
 			const findBoard = await boards.findOne({ _id: new ObjectId(data.Board) })
 			if (findBoard) {
+				const findTask = await boards.findOne({
+					$and: [{ name: data.name }, { Board: data.Board }]
+				})
+				if (findTask) {
+					throw Error('name already in use')
+				}
 				const result = await tasks.insertOne(data)
 				return data
 			} else {

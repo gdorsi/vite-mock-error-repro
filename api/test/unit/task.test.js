@@ -19,8 +19,6 @@ function buildServer() {
 }
 
 test('POST /tasks', async (t) => {
-	
-
 	t.test('returns 400 with missing credentials', async (t) => {
 		const fastify = buildServer()
 		fastify.authenticate.callsFake(async (request) => {
@@ -34,8 +32,6 @@ test('POST /tasks', async (t) => {
 		t.equal(res.statusCode, 400)
 	})
 
-	
-
 	t.test('returns 500 when database errors', async (t) => {
 		const fastify = buildServer()
 		fastify.authenticate.callsFake(async (request) => {
@@ -48,7 +44,25 @@ test('POST /tasks', async (t) => {
 			method: 'POST',
 			body: {
 				name: 'alice',
-                board: '1'
+				board: '1'
+			}
+		})
+
+		t.equal(res.statusCode, 500)
+	})
+	t.test('returns 500 when name already in use', async (t) => {
+		const fastify = buildServer()
+		fastify.authenticate.callsFake(async (request) => {
+			request.user = { id: '1', iat: 1 }
+		})
+		fastify.taskModels.createTask.rejects(new Error('name already in use'))
+
+		const res = await fastify.inject({
+			url: '/tasks/',
+			method: 'POST',
+			body: {
+				name: 'alreadyinuse',
+				board: '1'
 			}
 		})
 
@@ -73,12 +87,10 @@ test('POST /tasks', async (t) => {
 			method: 'POST',
 			body: {
 				name: 'alice',
-                board: '1'
+				board: '1'
 			}
 		})
 
 		t.equal(res.statusCode, 200)
 	})
 })
-
-
