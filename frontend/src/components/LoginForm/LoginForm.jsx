@@ -1,5 +1,5 @@
 // @ts-check
-import React, { useState } from 'react'
+import React, { useState, useId } from 'react'
 
 import './LoginForm.css'
 
@@ -12,9 +12,7 @@ import './LoginForm.css'
 async function doLogin(email, password) {
 	const res = await fetch('/api/login/', {
 		method: 'POST',
-
 		headers: { 'Content-Type': 'application/json' },
-
 		body: JSON.stringify({
 			email: email,
 			password: password
@@ -50,28 +48,29 @@ const LoginForm = (props) => {
 		props.onLogin(token)
 	}
 
+	const emailId = `email-${useId()}`
+	const passwordId = `password-${useId()}`
+
 	return (
-		<>
-			<form className="LoginForm" onSubmit={handleSubmit}>
-				Email:
-				<input
-					className="Email"
-					type="email"
-					value={email}
-					onChange={(e) => setEmail(e.target.value)}
-					required
-				/>
-				Password:{' '}
-				<input
-					className="Password"
-					type="password"
-					value={password}
-					onChange={(e) => setPassword(e.target.value)}
-					required
-				/>
-				<button type="submit">Login</button>
-			</form>
-		</>
+		<form className="LoginForm" onSubmit={handleSubmit}>
+			<label htmlFor={emailId}>Email</label>
+			<input
+				id={emailId}
+				type="email"
+				value={email}
+				onChange={(e) => setEmail(e.target.value)}
+				required
+			/>
+			<label htmlFor={passwordId}>Password</label>
+			<input
+				id={passwordId}
+				type="password"
+				value={password}
+				onChange={(e) => setPassword(e.target.value)}
+				required
+			/>
+			<button type="submit">Login</button>
+		</form>
 	)
 }
 
