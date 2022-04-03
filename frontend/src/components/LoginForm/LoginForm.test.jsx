@@ -17,6 +17,10 @@ describe('LoginForm', () => {
 		}
 	}
 
+	afterEach(() => {
+		vi.clearAllMocks()
+	})
+
 	it('submits the form', async () => {
 		vi.mocked(axios).mockImplementationOnce(() => {
 			/** @type {*} */
