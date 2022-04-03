@@ -12,16 +12,3 @@ jobs:
         run: yarn install
       - name: Launch api tests
         run: yarn test
-      - name: Launch frontend tests
-        run: yarn test:frontend
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Setup Node.js
-        uses: volta-cli/action@v1
-      - name: Install dependencies
-        run: yarn install
-      - name: Build the package
-        run: yarn build
