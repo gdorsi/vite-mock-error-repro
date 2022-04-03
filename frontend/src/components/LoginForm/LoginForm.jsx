@@ -1,5 +1,6 @@
 // @ts-check
 import React, { useState, useId } from 'react'
+import axios from 'redaxios'
 
 import './LoginForm.css'
 
@@ -10,21 +11,16 @@ import './LoginForm.css'
  * @returns Promise<{ token: string }>
  */
 async function doLogin(email, password) {
-	const res = await fetch('/api/login/', {
+	const res = await axios({
 		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({
-			email: email,
-			password: password
-		})
+		url: '/api/login/',
+		data: {
+			email,
+			password
+		}
 	})
 
-	if (res.status === 200) {
-		return res.json()
-	}
-
-	// TODO better error handling
-	throw res
+	return res.data
 }
 
 /**

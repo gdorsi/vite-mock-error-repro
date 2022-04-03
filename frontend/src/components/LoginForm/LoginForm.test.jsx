@@ -1,6 +1,9 @@
 // @ts-check
-import { render, screen, expect, describe, it, vi } from '../../test-utils'
+import { render, screen, expect, describe, it, vi, userEvent, waitFor } from '../../test-utils'
 import LoginForm from './LoginForm'
+import axios from 'redaxios'
+
+vi.mock('redaxios')
 
 describe('LoginForm', () => {
 	const props = {
@@ -8,18 +11,31 @@ describe('LoginForm', () => {
 	}
 
 	function setup() {
-		return render(<LoginForm {...props} />)
+		return {
+			user: userEvent.setup(),
+			rtl: render(<LoginForm {...props} />)
+		}
 	}
 
-	it('renders the form', () => {
-		setup()
+	it('submits the form', async () => {
+		vi.mocked(axios).mockImplementationOnce(() => {
+			/** @type {*} */
+			const response = Promise.resolve({ data: { token: 'success' } })
 
-		expect(
+			return response
+		})
+
+		const { user } = setup()
+
+		user.type(
 			screen.getByRole('textbox', {
 				name: 'Email'
-			})
-		).toBeInTheDocument()
+			}),
+			'test@test.test'
+		)
 
-		expect(screen.getByLabelText('Password')).toBeInTheDocument()
+		user.type(screen.getByLabelText('Password'), 'test{enter}')
+
+		await waitFor(() => expect(props.onLogin).toHaveBeenCalledWith('success'))
 	})
 })

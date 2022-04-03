@@ -5118,6 +5118,7 @@ __metadata:
     prettier: ^2.6.1
     react: ^18.0.0
     react-dom: ^18.0.0
+    redaxios: ^0.4.1
     sinon: ^13.0.1
     tap: ^15.2.3
     vite: ^2.9.1
@@ -5379,6 +5380,13 @@ __metadata:
   dependencies:
     picomatch: ^2.2.1
   checksum: 1ced032e6e45670b6d7352d71d21ce7edf7b9b928494dcaba6f11fba63180d9da6cd7061ebc34175ffda6ff529f481818c962952004d273178acd70f7059b320
+  languageName: node
+  linkType: hard
+
+"redaxios@npm:^0.4.1":
+  version: 0.4.1
+  resolution: "redaxios@npm:0.4.1"
+  checksum: 9e67aee2c9e64461221a583b1b2a5cf859e268a101fbc54d57de651e98cba9a9e94935731916ab4e6fb4eba1cb9284a03522b376512272f26cb4be6b16f06221
   languageName: node
   linkType: hard
 

@@ -31,6 +31,7 @@
 		"mongoose": "^6.2.9",
 		"pino-pretty": "^7.6.0",
 		"prettier": "^2.6.1",
+		"redaxios": "^0.4.1",
 		"sinon": "^13.0.1",
 		"tap": "^15.2.3"
 	},

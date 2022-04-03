@@ -21,6 +21,7 @@ expect.extend(matchers)
 
 // re-export everything
 export * from '@testing-library/react'
+export { default as userEvent } from '@testing-library/user-event'
 /** @type {import('./vitest')} */
 export * from 'vitest'
 

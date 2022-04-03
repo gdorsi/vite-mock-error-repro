@@ -103,7 +103,7 @@ function App() {
 	if (login) {
 		return (
 			<>
-				<button onClick={(e) => setLogin(false)}>Signup</button>
+				<button onClick={() => setLogin(false)}>Signup</button>
 				<LoginForm onLogin={handleLogin} />
 			</>
 		)
